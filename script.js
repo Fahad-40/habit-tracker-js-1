@@ -31,7 +31,7 @@ function renderItem() {
 
         habitsList.innerHTML += `
         <div class="habit-list-item">
-            <p>${habit.name}</p>
+         
             <button class="mark-as-done-btn" data-id="${habit.id}">${isDoneToday ? "Done" : "Mark as Done"}</button>
         </div>
 
