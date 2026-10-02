@@ -17,6 +17,10 @@
         flex-direction: column;
 
     }
+    .habit-list-item1{
+        display: flex;
+flex-direction: column;
+    }
     .habit-list-item{
         border: 1px solid green;
           display: flex;
@@ -26,14 +30,37 @@
     height: 3rem;
 gap: 1rem;
 }
-.history-box{
-    width:100%;
-}
 
 .hidden{
-    display: none;
+  display: none !important;
 }
 
+.habit-list-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.history-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column  ;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.history-day {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    background: #f1f1f1;
+    border-radius: 4px;
+}
 
 </style>
 

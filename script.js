@@ -39,19 +39,25 @@ function renderItem() {
             const dateStr = d.toISOString().split("T")[0];
             const wasDone = habit.history.some(entry => entry.date === dateStr);
 
-            historyHTML += `<span>${wasDone ? "done" : "not Done"}</span>`
+            historyHTML += `<span>${dateStr}: ${wasDone ? "done" : "not Done"}</span>`
         }
 
 
         const isDoneToday = habit.history.some(entry => entry.date === todayDate)
 
         habitsList.innerHTML += `
-        <div class="habit-list-item">
+        
+       
+        <div class="habit-list-item1">
+            <div class="habit-list-item">
             <p>${habit.name}</p>
             <button class="mark-as-done-btn" data-id="${habit.id}">${isDoneToday ? "Done" : "Mark as Done"}</button>
             <button class="history-btn" data-id="${habit.id}">History</button>
-                <div class="history-box hidden" data-id="${habit.id}">${historyHTML}</div>
             </div>
+        <div class="history-box hidden" data-id="${habit.id}">${historyHTML}</div>
+            </div>
+
+    
 
     `;
     }
