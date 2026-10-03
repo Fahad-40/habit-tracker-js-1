@@ -2,10 +2,22 @@ const addHabitBtn = document.querySelector(".add-habit-btn");
 const habitInput = document.querySelector(".habit-input");
 const habitsList = document.querySelector("#habits-list");
 const markAsDoneBtn = document.querySelector(".mark-as-done-btn");
-const historyBtn = document.querySelector(".history-btn");
-const historyBox = document.querySelector(".history-box");
+// const historyBtn = document.querySelector(".history-btn");
+// const historyBox = document.querySelector(".history-box");
+const streakHead = document.querySelector(".streak-head");
+const deleteBtn = document.querySelector(".delete-btn");
 const todayDate = new Date().toISOString().split("T")[0];
-const habitsArray = [];
+let habitsArray = JSON.parse(localStorage.getItem("HabitsData")) || [];
+
+renderItem();
+
+function getTodayDate() {
+    return new Date().toISOString().split("T")[0];
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem("HabitsData", JSON.stringify(habitsArray));
+}
 
 addHabitBtn.addEventListener("click", () => {
     const inputValue = habitInput.value;
@@ -19,6 +31,8 @@ addHabitBtn.addEventListener("click", () => {
         history: []
     }
     habitsArray.push(newHabit);
+    saveToLocalStorage()
+
     console.log(habitsArray)
     // console.log(value);
     habitInput.value = ""
@@ -42,22 +56,17 @@ function renderItem() {
             historyHTML += `<span>${dateStr}: ${wasDone ? "done" : "not Done"}</span>`
         }
 
-
-        const isDoneToday = habit.history.some(entry => entry.date === todayDate)
+        const isDoneToday = habit.history.some(entry => entry.date === getTodayDate())
 
         habitsList.innerHTML += `
         
-       
-        <div class="habit-list-item1">
             <div class="habit-list-item">
             <p>${habit.name}</p>
             <button class="mark-as-done-btn" data-id="${habit.id}">${isDoneToday ? "Done" : "Mark as Done"}</button>
             <button class="history-btn" data-id="${habit.id}">History</button>
+            <button class="delete-btn" data-id="${habit.id}">Delete</button>
+            <div class="history-box hidden" data-id="${habit.id}">${historyHTML}</div>
             </div>
-        <div class="history-box hidden" data-id="${habit.id}">${historyHTML}</div>
-            </div>
-
-    
 
     `;
     }
@@ -71,24 +80,40 @@ habitsList.addEventListener("click", (e) => {
 
         const doneBtn = e.target.closest(".mark-as-done-btn");
         const buttonId = Number(doneBtn.dataset.id);
-        console.log(buttonId)
+       
         const clickedItem = habitsArray.find(habit => habit.id === buttonId)
+        let alreadyDoneToday = clickedItem.history.some(entry => entry.date === getTodayDate());
 
-        clickedItem.history.push({ date: todayDate, status: "done" })
-        console.log(clickedItem)
+        if (alreadyDoneToday) {
+            clickedItem.history =  clickedItem.history.filter(habit => habit.date !== getTodayDate())
+
+        } else {
+
+            clickedItem.history.push({ date: getTodayDate(), status: "done" })
+        }
+
+        saveToLocalStorage();
+      
         renderItem();
     }
 
     else if (e.target.closest(".history-btn")) {
-const historyBtn = e.target.closest(".history-btn");
-// const clickedBtn = 
-        // historyBox.classList.toggle("flex")
+        const historyBtn = e.target.closest(".history-btn");
+        const parentElement = historyBtn.parentElement;
+        const historyBox = parentElement.querySelector(".history-box")
+        historyBox.classList.toggle("hidden");
+    }
 
-const parentElement = historyBtn.parentElement;
+    else if (e.target.closest(".delete-btn")) {
+        const deleteBtn = e.target.closest(".delete-btn");
+        const deleteBtnId = Number(deleteBtn.dataset.id);
+        console.log("delete")
+        habitsArray = habitsArray.filter(habit => habit.id !== deleteBtnId);
+        saveToLocalStorage();
+        renderItem();
 
-const historyBox = parentElement.querySelector(".history-box")
-historyBox.classList.toggle("hidden");
     }
 
 })
+
 
