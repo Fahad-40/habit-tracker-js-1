@@ -73,8 +73,6 @@ function renderItem() {
     )
 }
 
-
-
 habitsList.addEventListener("click", (e) => {
     if (e.target.closest(".mark-as-done-btn")) {
 
@@ -90,6 +88,7 @@ habitsList.addEventListener("click", (e) => {
         } else {
 
             clickedItem.history.push({ date: getTodayDate(), status: "done" })
+
         }
 
         saveToLocalStorage();

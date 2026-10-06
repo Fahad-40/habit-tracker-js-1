@@ -47,7 +47,7 @@ function render() {
             d.setDate(d.getDate() - i);
             let dateStr = d.toISOString().split("T")[0];
             let wasDone = habit.history.some(entry => entry.date === dateStr);
-            historyHTML = `<span>${dateStr} : ${wasDone ? "Done!" : "Mark as Done"} </span>`
+            historyHTML += `<span>${dateStr} : ${wasDone ? "Done!" : "Not Done Man!"} </span>`
         }
 
         let isDoneToday = habit.history.some(entry => entry.date === getTodayDate());
@@ -66,15 +66,49 @@ function render() {
 
     });
 
+
 }
 render()
 //   <button class="mark-as-done-btn" data-id="${habit.id}">${isDoneToday ? "Done" : "Mark as Done"}</button>
 
-habitsList.addEventListener("click" , (e) => {
+habitsList.addEventListener("click", (e) => {
 
-if (e.target.closest(".mark-as-done-btn")) {
-    
+    if (e.target.closest(".mark-as-done-btn")) {
+        const doneBtn = e.target.closest(".mark-as-done-btn");
+        const buttonId = Number(doneBtn.dataset.id);
+        clickedItem = habitsArray.find(habit => habit.id === buttonId);
+        const alreadyDoneToday = clickedItem.history.some(habit => habit.date === getTodayDate());
+
+        if (alreadyDoneToday) {
+            clickedItem.history = clickedItem.history.filter(habit => habit.date !== getTodayDate());
+        } else {
+            clickedItem.history.push({ date: getTodayDate(), status: "done" });
+        }
+   saveToLocalStorage();
+    render();
+
+    }
+
+else if(e.target.closest(".history-btn")){
+
+    const historyBtn = e.target.closest(".history-btn");
+    const parentElement = historyBtn.parentElement;
+    const historyBox = parentElement.querySelector(".history-box");
+historyBox.classList.toggle("hidden")
+
+}
+else if(e.target.closest(".delete-btn")){
+
+    const deleteBtn = e.target.closest(".delete-btn");
+        const buttonId = Number(deleteBtn.dataset.id);
+
+habitsArray = habitsArray.filter(habit => habit.id !== buttonId);
+  saveToLocalStorage();
+    render();
+
 }
 
 
+  
 })
+
