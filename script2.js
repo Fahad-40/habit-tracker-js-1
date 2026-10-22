@@ -66,7 +66,6 @@ function render() {
 
     });
 
-
 }
 render()
 //   <button class="mark-as-done-btn" data-id="${habit.id}">${isDoneToday ? "Done" : "Mark as Done"}</button>
@@ -106,9 +105,5 @@ habitsArray = habitsArray.filter(habit => habit.id !== buttonId);
   saveToLocalStorage();
     render();
 
-}
-
-
-  
+}  
 })
-
